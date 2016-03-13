@@ -1,0 +1,87 @@
+#cloud-config
+
+package_upgrade: true
+
+users:
+  - name: ambari
+    lock-passwd: True
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys:
+      - PUBLIC_KEY
+
+yum_repos:
+    ambari:
+        baseurl: http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.2.1.0/
+        enabled: true
+        failovermethod: priority
+        gpgcheck: true
+        gpgkey: http://s3.amazonaws.com/dev.hortonworks.com/ambari/centos6/RPM-GPG-KEY/RPM-GPG-KEY-Jenkins
+        name: Hortonworks Data Platform
+
+packages:
+ - rpm
+ - openssh-clients
+ - openssl
+ - ntp
+ - curl
+ - wget
+ - tar
+ - zip
+ - unzip
+ - ambari-agent
+ # Utils not required by HDP
+ - bind-utils
+
+
+write_files:
+-   content: |
+        # HDP require lots of open files
+        *          soft       nofile        10000
+        *          hard       nofile        10000
+
+    path: /etc/security/limits.d/30-nofile-ambari.conf
+    owner: root:root
+    permissions: '0644'
+
+
+runcmd: 
+ - echo "Reniew dhcp to map with correct hostname"
+ - ifdown eth0
+ - ifup eth0
+
+ - echo "Set umask to 0022"
+ - echo umask 0022 >> /etc/profile 
+
+ - echo "HDP suggest to Disable firewall ..."
+ - echo "... they are disabled by default (in this image)"
+
+ - echo "HDP suggest to Disable selinux"
+ - setenforce permissive
+ - sed -i -e 's/^SELINUX=.*$/SELINUX=permissive/' /etc/selinux/config 
+
+ - echo "Sync time with NTP"
+ - sed -i -e 's/^server .* iburst/server ntp.cineca.net iburst/' /etc/ntp.conf
+ - systemctl start ntpdate
+ - chkconfig ntpdate on
+
+ - echo "Set position of ambari ssh private key"
+ - chmod -R 600 /home/ambari/.ssh 
+ - chmod u+x /home/ambari/.ssh 
+ - chown -R ambari:ambari /home/ambari/
+
+ - echo "Configure ambari-agent"
+ - sed -i -e 's/hostname=localhost/hostname=ambari.hdp.reietti.cineca.it/' /etc/ambari-agent/conf/ambari-agent.ini
+ - ambari-agent start
+
+
+
+# python v2.6 (non 2.7)
+# The base directories you want to use as mount points for storing:
+#    NameNode data
+#    DataNodes data
+#    Secondary NameNode data
+#    Oozie data
+#    YARN data
+#    ZooKeeper data, if you install ZooKeeper
+#    Various log, pid, and db files, depending on your install type
+

@@ -1,0 +1,14 @@
+{ 
+	"random_seed": "1IYZm6CrxKU/Tu9NGb15KmAMC4Tw+TUzmgVw/y/7BgnQCvK+c5ixyMWSE/yG8LoSFJUqFfBiwW2bFOB8xsZD1O37xbQSUClrwEf1Tdc488ZTZv2DSDhMrtBDDPvtSFPk1/UryJ1EQFi/u60ZoSShQmydF/kJSj9f4yiOgiXsqPmn5RjlvRqraqd75A3Z6g2SqT5HlypK3BxxkRfYvhV55lV16feYEk+2v0b0LxAnlBGJ93hnhVTZ/DNAiut/m5UTVdeUVx6GPJ/GGpn9JuuOVYNWSkC1ZHqUoycxFv8sU+RYH4aqbSaNhn5XuuO2STpGNLsUns0j5gs5HOARYNSJH/Ez+MZ3tgxjdT4rXi/24Sc1dj2IghzKO3Er+L7GAq8dqZGNotQy7egJv/vQ4FLdpo5eouco/ShY2n5kh5Z5/2ROExTlK1LDmxiGMqOIMiLiJEpOQ75O5OdGROEZO8jQaXvcxQAV8aUon0Dmbx3HBEHwXqayLz3W7QwbnOf9Uj6Ou5lbv/8Recq2u2oycz9hRQn0QxgAggK7165QK2Wnw0xcjygNFL5Bn+FNbl03KSWryXJxPf+ZglZUXj+BjH0FwLYf13jQF7NvpkIwXogfUhAMv9jE36aUZeMqu9jnS7xNZHQwadJ4t1Yhdb2twOyyk7p+rILc2rXnipIL5f0GiY4=", 
+	"uuid": "4744bfc3-72fb-4bb0-aafd-5563424b5235", 
+	"availability_zone": "nova", 
+	"keys": [
+	], 
+	"hostname": "worker1", 
+	"launch_index": 2, 
+	"meta": {
+	}, 
+	"public_keys": {
+	}, 
+	"name": "worker1"
+}

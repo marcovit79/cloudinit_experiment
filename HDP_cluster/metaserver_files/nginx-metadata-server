@@ -1,0 +1,68 @@
+# - Classify the client
+geo $ambari {
+    default 0;
+    169.254.169.11 1;
+}
+geo $master1 {
+    default 0;
+    169.254.169.21 1;
+}
+geo $worker1 {
+    default 0;
+    169.254.169.31 1;
+}
+
+
+    
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server ipv6only=on;
+
+    root /vagrant/cloud-metadata;
+        
+    # Make site accessible from http://localhost/
+    server_name localhost;
+
+
+    # - List of metadata necessary for OpenStack
+    location /openstack/latest {
+        try_files /openstack/latest/index-all.txt =404;
+        add_header Content-Type "text/plain";
+    }
+
+    # - An empty json object
+    location /openstack/latest/vendor_data.json {
+        try_files /openstack/latest/vendor_data-all.json =404;
+        add_header Content-Type "application/json";
+    }
+
+
+    # - Handle meta-data
+    location /openstack/latest/meta_data.json {
+        if ( $ambari ) {
+            rewrite ^(.*)$ /openstack/latest/meta_data-ambari.json break;
+        }
+        if ( $master1 ) {
+            rewrite ^(.*)$ /openstack/latest/meta_data-master1.json break;
+        }
+        if ( $worker1 ) {
+            rewrite ^(.*)$ /openstack/latest/meta_data-worker1.json break;
+        }
+    }
+            
+
+    # - Handle USER DATA
+    location /openstack/latest/user_data {
+        add_header Content-Type "text/cloud-config";
+        sub_filter_types "*";
+        sub_filter 'PUBLIC_KEY' 'PK_VALUE_XYZ';
+
+        if ( $ambari ) {
+            rewrite ^(.*)$ $1-ambari.yml break;
+        }
+        if ( $ambari = "0" ) {
+            rewrite ^(.*)$ $1-nodes.yml break;   
+        }
+    }
+
+}

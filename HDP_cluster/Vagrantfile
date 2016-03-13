@@ -1,0 +1,19 @@
+Vagrant.configure("2") do |config|
+  
+  
+  config.vm.define "mdatasrv" do |mdatasrv|
+    mdatasrv.vm.box = "ubuntu/trusty64"
+    
+    mdatasrv.vm.provision "shell", path: "metaserver_files/metaserver-bootstrap.sh"
+    
+    mdatasrv.ssh.forward_x11 = true
+
+    mdatasrv.vm.provider "virtualbox" do |v|
+      v.memory = 1024
+      v.cpus = 1
+
+      v.customize ["modifyvm", :id, "--nic2", "intnet", "--intnet2", "clusterLan"]
+    end
+  end
+
+end
