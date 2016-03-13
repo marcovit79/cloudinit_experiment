@@ -1,0 +1,4 @@
+HDP_cluster/.vagrant/
+HDP_cluster/keys/*
+HDP_cluster/srv_image/*
+
