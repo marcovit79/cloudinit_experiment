@@ -49,7 +49,7 @@ runcmd:
  - ifdown eth0
  - ifup eth0
 
- - echo "Set umask to 0022"
+ - echo "HDP suggest set umask to 0022"
  - echo umask 0022 >> /etc/profile 
 
  - echo "HDP suggest to Disable firewall ..."
@@ -64,20 +64,11 @@ runcmd:
  - systemctl start ntpdate
  - chkconfig ntpdate on
 
- - echo "Set position of ambari ssh private key"
- - chmod -R 600 /home/ambari/.ssh 
- - chmod u+x /home/ambari/.ssh 
- - chown -R ambari:ambari /home/ambari/
+ - echo "Create log virtual partition"
+ - dd if=/dev/zero of=/var/__log_partition.fs bs=1M count=1024
+ - mkfs -F -t ext4 /var/__log_partition.fs
+ - echo "/var/__log_partition.fs /var/log ext4 loop,rw,auto 0 0" >> /etc/fstab
+ - mount /var/log
 
 
-# python v2.6 (non 2.7)
-
-# The base directories you want to use as mount points for storing:
-#    NameNode data
-#    DataNodes data
-#    Secondary NameNode data
-#    Oozie data
-#    YARN data
-#    ZooKeeper data, if you install ZooKeeper
-#    Various log, pid, and db files, depending on your install type
-
+# Make a better handling of log partition
