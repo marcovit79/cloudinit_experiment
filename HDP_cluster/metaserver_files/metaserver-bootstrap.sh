@@ -62,7 +62,7 @@ apt-get -y -q install xauth firefox
 echo "Install tools for modify servers image"
 apt-get -y -q install qemu libguestfs-tools
 update-guestfs-appliance
-chmod +r /boot/vmlinuz-3.13.0-79-generic
+chmod +r /boot/vmlinuz-*
 
 echo "Download servers image"
 mkdir -p /vagrant/srv_image
